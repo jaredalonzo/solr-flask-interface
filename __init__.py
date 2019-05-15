@@ -1,6 +1,8 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for
 
+from reviews.forms import ReviewSearchForm
+
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
 
@@ -19,8 +21,8 @@ def create_app(test_config=None):
         pass
 
     @app.route('/', methods=['GET'])
-    @app.route('/<name>', methods['GET'])
-    def index():
+    @app.route('/<name>', methods=['GET'])
+    def index(name=''):
         return render_template('index.html', templatename=name)
 
     @app.route('/search',methods=['GET', 'POST'])
@@ -41,7 +43,7 @@ def create_app(test_config=None):
     def lookup(id):
         res = solr.id_search(id)
         if (int(res['numFound']) > 1):
-            raise Exception(f"Found more than one document of ID {id}")
+            raise Exception("Found more than one document of ID")
         iddoc = '' if int(res['numFound']) == 0 else res['docs'][0]
         return render_template('reviewdetail.html', id=id, doc=iddoc)
 
