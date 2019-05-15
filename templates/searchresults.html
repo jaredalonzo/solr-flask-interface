@@ -1,0 +1,31 @@
+<style type="text/css">
+	table, th, td { border: 1px solid black;}
+</style>
+	
+<h1>Review Search Results</h1>
+
+<h3> Total {{results['numFound']}} Matches, Starting at {{start}}</h3>
+
+<table>
+<tr><th>Name</th><th>Score</th><th>Summary</th><th></th></tr>
+{% for doc in results['docs'] %}
+<tr>
+<td>{{doc['productName']}}</td>
+<td>{{doc['reviewScore']}}</td>
+<td>{{doc['reviewSummary']}}</td>
+<td><a href="{{url_for('lookup', id=doc['id'])}}">Details</a></td>
+</tr>
+{% endfor %}
+</table>
+
+<h3>Pagination</h3>
+<ul>
+{%if start + 10 < results['numFound'] %}
+<li><a href="{{url_for('searchResults', k=k, d=d, t=t, start=start+10)}}">Next</a></li>
+{% else %}
+<li>Next</li>
+{% endif %}
+<li>Previous</li>
+</ul>
+
+<a href="{{url_for('searchForm')}}">New Search</a>

@@ -1,0 +1,12 @@
+<h1>Review Details</h1>
+
+{% if doc=='' %}
+<h3>Sorry, no matches for {{id}}</h3>
+{% else %}
+<ul>
+<li> ProductID: {{doc['productID']}}</li>
+<li> Score: {{doc['reviewScore']}}</li>
+<li> Summary: {{doc['reviewSummary']}}</li>
+<li> Review: {{doc['reviewBody']}}</li>
+</ul>
+{% endif %}
