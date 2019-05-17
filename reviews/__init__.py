@@ -29,6 +29,7 @@ def create_app(test_config=None):
     @app.route('/search',methods=['GET', 'POST'])
     def searchForm():
         form = ReviewSearchForm()
+        print(type(form))
         if request.method == 'GET':
             return render_template('reviewsearch.html', form=form)
         elif not form.validate():
@@ -45,6 +46,9 @@ def create_app(test_config=None):
         k = request.args.get('k')
         d = request.args.get('d')
         t = request.args.get('t')
+        print("k: " + k)
+        print("d: " + d)
+        print("t: " + t)
         start = request.args.get('start')
         res = solr.review_search(k, d + " " + t, start=start)
         return render_template('searchResults.html',
@@ -54,7 +58,7 @@ def create_app(test_config=None):
 
 
     @app.route('/lookup')
-    def idLookup(id):
+    def idLookup():
         id = request.args.get('id')
         res = solr.id_search(id)
         if int(res['numFound']) > 1:
