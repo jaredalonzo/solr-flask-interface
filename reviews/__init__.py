@@ -1,5 +1,6 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for
+from jinja2 import Template
 
 import reviews.solrinterface as solr
 from reviews.forms import ReviewSearchForm
@@ -20,6 +21,19 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
+
+    @app.context_processor
+    def utility():
+        def asin(asin):
+            res = solr.product_asin_search(asin)
+            if int(res['numFound']) > 1:
+                raise Exception('Found more than one document')
+            elif int(res['numFound']) == 0:
+                doc = ''
+            else:
+                doc = res['docs'][0]['title']
+            return doc
+        return dict(asin=asin)
 
     @app.route('/', methods=['GET'])
     @app.route('/<name>', methods=['GET'])
@@ -56,13 +70,12 @@ def create_app(test_config=None):
                                 start=int(start),
                                 k=k, d=d, t=t)
 
-
     @app.route('/lookup')
     def idLookup():
         id = request.args.get('id')
         res = solr.id_search(id)
         if int(res['numFound']) > 1:
-            raise Exception("Found more than one document of ID")
+            raise Exception('Found more than one document')
         elif int(res['numFound']) == 0:
             doc = ''
         else:

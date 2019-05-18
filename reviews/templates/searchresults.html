@@ -10,7 +10,7 @@
 <tr><th>Name</th><th>Score</th><th>Summary</th><th></th></tr>
 {% for doc in results['docs'] %}
 <tr>
-<td>{{doc['asin']}}</td>
+<td>{{asin(doc['asin'])}}</td>
 <td>{{doc['overall']}}</td>
 <td>{{doc['summary']}}</td>
 <td><a href="{{url_for('idLookup', id=doc['id'])}}">Details</a></td>
