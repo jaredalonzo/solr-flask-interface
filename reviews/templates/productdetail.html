@@ -1,0 +1,18 @@
+<h1>Product Details</h1>
+
+{% if doc=='' %}
+<h3>Sorry, no matches for {{asin}}</h3>
+{% else %}
+<ul>
+    <li> ASIN: {{doc['asin']}} </li>
+    <li> Product Name: {{doc['title']}} </li>
+    {% if doc['description'] %}
+    <li> Product Description: {{doc['description']}} </li>
+    {% endif %}
+    {% if doc['price'] %}
+    <li> Price: ${{doc['price']}} </li>
+    {% endif %}
+</ul>
+{% endif %}
+
+<a href="{{request.headers.get('Referer')}}">Back</a>

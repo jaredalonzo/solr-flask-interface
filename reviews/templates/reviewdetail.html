@@ -10,3 +10,5 @@
 <li> Review: {{doc['reviewText']}}</li>
 </ul>
 {% endif %}
+
+<a href="{{request.headers.get('Referer')}}">Back</a>

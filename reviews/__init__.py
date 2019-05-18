@@ -24,7 +24,7 @@ def create_app(test_config=None):
 
     @app.context_processor
     def utility():
-        def asin(asin):
+        def search_title(asin):
             res = solr.product_asin_search(asin)
             if int(res['numFound']) > 1:
                 raise Exception('Found more than one document')
@@ -33,7 +33,7 @@ def create_app(test_config=None):
             else:
                 doc = res['docs'][0]['title']
             return doc
-        return dict(asin=asin)
+        return dict(search_title=search_title)
 
     @app.route('/', methods=['GET'])
     @app.route('/<name>', methods=['GET'])
@@ -41,7 +41,7 @@ def create_app(test_config=None):
         return render_template('index.html', templatename=name)
 
     @app.route('/search',methods=['GET', 'POST'])
-    def searchForm():
+    def search_form():
         form = ReviewSearchForm()
         print(type(form))
         if request.method == 'GET':
@@ -49,29 +49,26 @@ def create_app(test_config=None):
         elif not form.validate():
             return render_template('reviewsearch.html', form=form)
         else:
-            return redirect(url_for('searchResults',
+            return redirect(url_for('search_results',
                                     k=form.keywords.data,
-                                    d=form.scoreDirection.data,
-                                    t=form.scoreThreshold.data,
                                     start=0))
 
     @app.route('/search/results', methods=['GET', 'POST'])
-    def searchResults():
+    def search_results():
         k = request.args.get('k')
-        d = request.args.get('d')
-        t = request.args.get('t')
-        print("k: " + k)
-        print("d: " + d)
-        print("t: " + t)
+        # d = request.args.get('d')
+        # t = request.args.get('t')
+        # print("d: " + d)
+        # print("t: " + t)
         start = request.args.get('start')
-        res = solr.review_search(k, d + " " + t, start=start)
-        return render_template('searchResults.html',
+        res = solr.review_search(k, start=start)
+        return render_template('searchresults.html',
                                 results=res,
                                 start=int(start),
-                                k=k, d=d, t=t)
+                                k=k)
 
-    @app.route('/lookup')
-    def idLookup():
+    @app.route('/review')
+    def review_lookup():
         id = request.args.get('id')
         res = solr.id_search(id)
         if int(res['numFound']) > 1:
@@ -81,5 +78,17 @@ def create_app(test_config=None):
         else:
             doc = res['docs'][0]
         return render_template('reviewdetail.html', id=id, doc=doc)
+
+    @app.route('/product')
+    def product_lookup():
+        asin = request.args.get('asin')
+        res = solr.product_asin_search(asin)
+        if int (res['numFound']) > 1:
+            raise Exception('Found more than one document')
+        elif int(res['numFound']) == 0:
+            doc = ''
+        else:
+            doc = res['docs'][0]
+        return render_template('productdetail.html', asin=asin, doc=doc)
 
     return app

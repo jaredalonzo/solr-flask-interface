@@ -4,28 +4,81 @@
 	
 <h1>Review Search Results</h1>
 
-<h3> Total {{results['numFound']}} Matches, Starting at {{start}}</h3>
-
 <table>
 <tr><th>Name</th><th>Score</th><th>Summary</th><th></th></tr>
 {% for doc in results['docs'] %}
 <tr>
-<td>{{asin(doc['asin'])}}</td>
+<td><a href="{{url_for('product_lookup', asin=doc['asin'])}}">{{search_title(doc['asin'])}}</a></td>
 <td>{{doc['overall']}}</td>
 <td>{{doc['summary']}}</td>
-<td><a href="{{url_for('idLookup', id=doc['id'])}}">Details</a></td>
+<td><a href="{{url_for('review_lookup', id=doc['id'])}}">Details</a></td>
 </tr>
 {% endfor %}
 </table>
 
-<h3>Pagination</h3>
-<ul>
-{%if start + 10 < results['numFound'] %}
-<li><a href="{{url_for('searchResults', k=k, d=d, t=t, start=start+10)}}">Next</a></li>
+<h4> Showing {{start}} to {{start+10}} of {{results['numFound']}} Matches</h4>
+
+<a href="{{url_for('search_form')}}">New Search</a>
+
+<h3>Quick Options</h3>
+<table>
+	<tr><th>Paging</th><th>Faceting</th></tr>
+	<tr>
+		<td>
+			<ul>
+				{% if start + 10 < results['numFound'] %}
+				<li><a href="{{url_for('search_results', k=k, t=t, start=start+10)}}">Next</a></li>
+				{% else %}
+				<li>Next</li>
+				{% endif %}
+				{% if start > 0 %}
+				<li><a href="{{url_for('search_results', k=k, t=t, start=start-10)}}">Previous</a></li>
+				{% else %}
+				<li>Previous</li>
+				{% endif %}	
+			</ul>
+		</td>
+		<td>
+			<table>
+				<tr><th>Score</th><th>Count</th></tr>
+				<tr>
+					<td>1</td>
+					<td>31231</td>
+					<td>View</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>3123132</td>
+					<td>View</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>123</td>
+					<td>View</td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>21311</td>
+					<td>View</td>
+				</tr>
+				<tr>
+					<td>5</td>
+					<td>3123</td>
+					<td>View</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<!-- <ul>
+{% if start + 10 < results['numFound'] %}
+<li><a href="{{url_for('search_results', k=k, t=t, start=start+10)}}">Next</a></li>
 {% else %}
 <li>Next</li>
 {% endif %}
+{% if start > 0 %}
+<li><a href="{{url_for('search_results', k=k, t=t, start=start-10)}}">Previous</a></li>
+{% else %}
 <li>Previous</li>
-</ul>
-
-<a href="{{url_for('searchForm')}}">New Search</a>
+{% endif %}
+</ul> -->

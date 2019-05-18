@@ -3,7 +3,7 @@ import requests
 
 ##################################
 
-def review_search(kw, sc, start=0):
+def review_search(kw, sc="", start=0):
 	return do_query(review_query_dictionary(kw, sc, start), collection="amazon-reviews")
 
 def id_search(id):
@@ -49,14 +49,14 @@ def build_score_string(s):
 	if (len(s) == 0):
 		return None
 	else:
-		dir, val = s.split()
-		if (int(val) < 1 or int(val) > 5):
+		# dir, val = s.split()
+		if (int(s) < 1 or int(s) > 5):
 			raise Exception("Bad score value " + s)
-		if dir == "<=":
-			return "overall:[0%20TO%20" + str(val) + "]"
-		elif dir == ">=":
-			return "overall:[" + str(val) + "%20TO%20*]"
 		else:
-			raise Exception("Bad direction value " + s)
-
-test_id_search()
+			return "overall:" + str(s)
+		# if dir == "<=":
+		# 	return "overall:[0%20TO%20" + str(s) + "]"
+		# elif dir == ">=":
+		# 	return "overall:[" + str(s) + "%20TO%20*]"
+		# else:
+		# 	raise Exception("Bad direction value " + s)
