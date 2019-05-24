@@ -26,12 +26,12 @@ def create_app(test_config=None):
     def utility():
         def search_title(asin):
             res = solr.product_asin_search(asin)
-            if int(res['numFound']) > 1:
+            if int(res['response']['numFound']) > 1:
                 raise Exception('Found more than one document')
-            elif int(res['numFound']) == 0:
+            elif int(res['response']['numFound']) == 0:
                 doc = ''
             else:
-                doc = res['docs'][0]['title']
+                doc = res['response']['docs'][0]['title']
             return doc
         return dict(search_title=search_title)
 
@@ -56,39 +56,43 @@ def create_app(test_config=None):
     @app.route('/search/results', methods=['GET', 'POST'])
     def search_results():
         k = request.args.get('k')
-        # d = request.args.get('d')
-        # t = request.args.get('t')
-        # print("d: " + d)
-        # print("t: " + t)
+        t = request.args.get('t')
+        if t is None:
+            t = ''
         start = request.args.get('start')
-        res = solr.review_search(k, start=start)
+        res = solr.review_search(k, t, start=start)
+        print(res['facet_counts'])
+        print("------------------------------------------------")
+        print(res['response']['numFound'])
         return render_template('searchresults.html',
-                                results=res,
+                                results=res['response'],
+                                facets=res['facet_counts'],
                                 start=int(start),
+                                t=t,
                                 k=k)
 
     @app.route('/review')
     def review_lookup():
         id = request.args.get('id')
         res = solr.id_search(id)
-        if int(res['numFound']) > 1:
+        if int(res['response']['numFound']) > 1:
             raise Exception('Found more than one document')
-        elif int(res['numFound']) == 0:
+        elif int(res['response']['numFound']) == 0:
             doc = ''
         else:
-            doc = res['docs'][0]
+            doc = res['response']['docs'][0]
         return render_template('reviewdetail.html', id=id, doc=doc)
 
     @app.route('/product')
     def product_lookup():
         asin = request.args.get('asin')
         res = solr.product_asin_search(asin)
-        if int (res['numFound']) > 1:
+        if int (res['response']['numFound']) > 1:
             raise Exception('Found more than one document')
-        elif int(res['numFound']) == 0:
+        elif int(res['response']['numFound']) == 0:
             doc = ''
         else:
-            doc = res['docs'][0]
+            doc = res['response']['docs'][0]
         return render_template('productdetail.html', asin=asin, doc=doc)
 
     return app

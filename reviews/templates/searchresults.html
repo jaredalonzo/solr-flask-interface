@@ -16,7 +16,7 @@
 {% endfor %}
 </table>
 
-<h4> Showing {{start}} to {{start+10}} of {{results['numFound']}} Matches</h4>
+<h4> Showing {{start+1}} to {{start+10}} of {{results['numFound']}} Matches</h4>
 
 <a href="{{url_for('search_form')}}">New Search</a>
 
@@ -27,12 +27,12 @@
 		<td>
 			<ul>
 				{% if start + 10 < results['numFound'] %}
-				<li><a href="{{url_for('search_results', k=k, t=t, start=start+10)}}">Next</a></li>
+				<li><a href="{{url_for('search_results', k=k, start=start+10)}}">Next</a></li>
 				{% else %}
 				<li>Next</li>
 				{% endif %}
 				{% if start > 0 %}
-				<li><a href="{{url_for('search_results', k=k, t=t, start=start-10)}}">Previous</a></li>
+				<li><a href="{{url_for('search_results', k=k, start=start-10)}}">Previous</a></li>
 				{% else %}
 				<li>Previous</li>
 				{% endif %}	
@@ -42,29 +42,39 @@
 			<table>
 				<tr><th>Score</th><th>Count</th></tr>
 				<tr>
-					<td>1</td>
-					<td>31231</td>
-					<td>View</td>
+					{% if facets['facet_fields']['overall'][1] %}
+					<td>{{facets['facet_fields']['overall'][0]}}</td>
+					<td>{{facets['facet_fields']['overall'][1]}}</td>
+					<td><a href="{{url_for('search_results', k=k, t=1, start=start)}}">View</a></td>
+					{% endif %}
 				</tr>
 				<tr>
-					<td>2</td>
-					<td>3123132</td>
-					<td>View</td>
+					{% if facets['facet_fields']['overall'][3] %}
+					<td>{{facets['facet_fields']['overall'][2]}}</td>
+					<td>{{facets['facet_fields']['overall'][3]}}</td>
+					<td><a href="{{url_for('search_results', k=k, t=2, start=start)}}">View</a></td>
+					{% endif %}
 				</tr>
 				<tr>
-					<td>3</td>
-					<td>123</td>
-					<td>View</td>
+					{% if facets['facet_fields']['overall'][5] %}
+					<td>{{facets['facet_fields']['overall'][4]}}</td>
+					<td>{{facets['facet_fields']['overall'][5]}}</td>
+					<td><a href="{{url_for('search_results', k=k, t=3, start=start)}}">View</a></td>
+					{% endif %}
 				</tr>
 				<tr>
-					<td>4</td>
-					<td>21311</td>
-					<td>View</td>
+					{% if facets['facet_fields']['overall'][7] %}
+					<td>{{facets['facet_fields']['overall'][6]}}</td>
+					<td>{{facets['facet_fields']['overall'][7]}}</td>
+					<td><a href="{{url_for('search_results', k=k, t=4, start=start)}}">View</a></td>
+					{% endif %}
 				</tr>
 				<tr>
-					<td>5</td>
-					<td>3123</td>
-					<td>View</td>
+					{% if facets['facet_fields']['overall'][9] %}
+					<td>{{facets['facet_fields']['overall'][8]}}</td>
+					<td>{{facets['facet_fields']['overall'][9]}}</td>
+					<td><a href="{{url_for('search_results', k=k, t=5, start=start)}}">View</a></td>
+					{% endif %}
 				</tr>
 			</table>
 		</td>

@@ -5,6 +5,7 @@
 {% else %}
 <ul>
 <li> ProductID: {{doc['asin']}}</li>
+<li> Product Name: {{search_title(doc['asin'])}}</li>
 <li> Score: {{doc['overall']}}</li>
 <li> Summary: {{doc['summary']}}</li>
 <li> Review: {{doc['reviewText']}}</li>

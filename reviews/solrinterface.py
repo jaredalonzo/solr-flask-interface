@@ -32,7 +32,7 @@ def do_query(params, collection, port="8983"):
 	print("args " + str(param_arg))
 	r = requests.get(query_string, param_arg)
 	if (r.status_code == 200):
-		return r.json()['response']
+		return r.json()
 	else:
 		raise Exception("Request Error: " + str(r.status_code))
 
@@ -43,7 +43,7 @@ def id_query_dictionary(id):
 	return {"q": "id:" + str(id)}
 
 def review_query_dictionary(kw="", sc="", start=0):
-	return {"q": "_text_:" + kw + ("%20AND%20" + build_score_string(sc) if build_score_string(sc) else ""), "start": start}
+	return {"facet.field": "overall", "facet": "on", "facet.sort": "index", "q": "_text_:" + kw + ("%20AND%20" + build_score_string(sc) if build_score_string(sc) else ""), "start": start}
 
 def build_score_string(s):
 	if (len(s) == 0):
