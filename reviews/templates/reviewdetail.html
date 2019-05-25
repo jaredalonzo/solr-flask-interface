@@ -1,3 +1,6 @@
+{% extends 'index.html' %}
+
+{% block content %}
 <h1>Review Details</h1>
 
 {% if doc=='' %}
@@ -13,3 +16,4 @@
 {% endif %}
 
 <a href="{{request.headers.get('Referer')}}">Back</a>
+{% endblock %}

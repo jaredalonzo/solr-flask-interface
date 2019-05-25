@@ -1,5 +1,11 @@
-<h1>Review Search</h1>
+{% extends 'bootstrap/base.html' %}
 
+{% block title %}
+  Review Search
+{% endblock %}
+
+{% block content %}
+<h1>Review Search</h1>
 {% if templatename != '' %}
 <p>
   Welcome back {{templatename}}
@@ -7,3 +13,4 @@
 {% endif %}
 
 <p>Click <a href="{{ url_for('search_form') }}">here</a> to start searching</p>
+{% endblock %}

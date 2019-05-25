@@ -1,10 +1,13 @@
+{% extends 'index.html' %}
+
+{% block content %}
 <style type="text/css">
 	table, th, td { border: 1px solid black;}
 </style>
-	
-<h1>Review Search Results</h1>
-
-<table>
+{% block h1 %}
+{% if h1 %}{{ h1 }} -<h1>Review Search Results</h1>{% endif %}
+{% endblock %}
+<table class="table-striped table-condensed table-bordered" style="margin-left: auto; margin-right: auto">
 <tr><th>Name</th><th>Score</th><th>Summary</th><th></th></tr>
 {% for doc in results['docs'] %}
 <tr>
@@ -16,30 +19,30 @@
 {% endfor %}
 </table>
 
+<br/>
+<div style="
+	padding: 0 70px ;
+	text-align: center;
+  "></div>
+{% if start > 0 %}
+<a href="{{url_for('search_results', k=k, start=start-10)}}" class="btn btn-primary" role="button">Previous</a>
+{% endif %}
+{% if start + 10 < results['numFound'] %}
+<a href="{{url_for('search_results', k=k, start=start+10)}}" class="btn btn-primary" role="button">Next</a>
+{% endif %}
+</div>
+
+
 <h4> Showing {{start+1}} to {{start+10}} of {{results['numFound']}} Matches</h4>
 
 <a href="{{url_for('search_form')}}">New Search</a>
 
 <h3>Quick Options</h3>
-<table>
-	<tr><th>Paging</th><th>Faceting</th></tr>
+<table class="table-condensed table-bordered table-striped">
+	<th>Faceting</th></tr>
 	<tr>
 		<td>
-			<ul>
-				{% if start + 10 < results['numFound'] %}
-				<li><a href="{{url_for('search_results', k=k, start=start+10)}}">Next</a></li>
-				{% else %}
-				<li>Next</li>
-				{% endif %}
-				{% if start > 0 %}
-				<li><a href="{{url_for('search_results', k=k, start=start-10)}}">Previous</a></li>
-				{% else %}
-				<li>Previous</li>
-				{% endif %}	
-			</ul>
-		</td>
-		<td>
-			<table>
+			<table class="table-condensed table-bordered table-striped">
 				<tr><th>Score</th><th>Count</th></tr>
 				<tr>
 					{% if facets['facet_fields']['overall'][1] %}
@@ -80,6 +83,7 @@
 		</td>
 	</tr>
 </table>
+{% endblock %}
 <!-- <ul>
 {% if start + 10 < results['numFound'] %}
 <li><a href="{{url_for('search_results', k=k, t=t, start=start+10)}}">Next</a></li>
