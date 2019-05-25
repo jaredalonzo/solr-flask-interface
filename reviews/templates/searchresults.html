@@ -7,6 +7,7 @@
 
 <div style="padding: 0 10%;">
 <h1>Search Results</h1>
+{% if results['numFound'] > 0 %}
 <table class="table-striped table-condensed table-bordered" style="padding: 2px 50px 2px">
 <tr><th>Name</th><th>Score</th><th>Summary</th><th></th></tr>
 {% for doc in results['docs'] %}
@@ -14,24 +15,31 @@
 <td><a href="{{url_for('product_lookup', asin=doc['asin'])}}">{{search_title(doc['asin'])}}</a></td>
 <td>{{doc['overall']}}</td>
 <td>{{doc['summary']}}</td>
-<td><a href="{{url_for('review_lookup', id=doc['id'])}}">Details</a></td>
+<td><a href="{{url_for('review_lookup', id=doc['id'])}}" class="btn btn-primary" role="button">Details</a></td>
 </tr>
 {% endfor %}
 </table>
 
 <br/>
 {% if start > 0 %}
-<a href="{{url_for('search_results', k=k, start=start-10)}}" class="btn btn-primary btn-md" role="button">Previous</a>
+<a href="{{url_for('search_results', k=k, t=t, start=start-10)}}" class="btn btn-primary btn-md" role="button">Previous</a>
 {% endif %}
 {% if start + 10 < results['numFound'] %}
-<a href="{{url_for('search_results', k=k, start=start+10)}}" class="btn btn-primary btn-md" role="button">Next</a>
+<a href="{{url_for('search_results', k=k, t=t, start=start+10)}}" class="btn btn-primary btn-md" role="button">Next</a>
 {% endif %}
 
-
-<h4> Showing {{start+1}} to {{start+10}} of {{results['numFound']}} Matches</h4>
+{% if start+10 <= results['numFound'] %}
+<h4> Showing {{start+1}} to {{start+10}} of {{results['numFound']}} matches</h4>
+{% else %}
+<h4> Showing {{start+1}} to {{results['numFound']}} matches</h4>
+{% endif %}
+{% else %}
+<h4> No reviews found! How about a new search?</h4>
+{% endif %}
 
 <a href="{{url_for('search_form')}}" class="btn btn-primary btn-md" role="button">New Search</a>
 
+{% if results['numFound'] > 0 %}
 <h3>Quick Options</h3>
 <table class="table-condensed table-bordered table-striped">
 	<th>Faceting</th></tr>
@@ -41,54 +49,48 @@
 				<tr><th>Score</th><th>Count</th></tr>
 				<tr>
 					{% if facets['facet_fields']['overall'][1] %}
+					{% set f = facets['facet_fields']['overall'][0] %}
 					<td>{{facets['facet_fields']['overall'][0]}}</td>
 					<td>{{facets['facet_fields']['overall'][1]}}</td>
-					<td><a href="{{url_for('search_results', k=k, t=1, start=0)}}" class="btn btn-primary btn-xs" role="button">View</a></td>
+					<td><a href="{{url_for('search_results', k=k, t=f, start=0)}}" class="btn btn-primary btn-xs" role="button">View</a></td>
 					{% endif %}
 				</tr>
 				<tr>
 					{% if facets['facet_fields']['overall'][3] %}
+					{% set f = facets['facet_fields']['overall'][2] %}
 					<td>{{facets['facet_fields']['overall'][2]}}</td>
 					<td>{{facets['facet_fields']['overall'][3]}}</td>
-					<td><a href="{{url_for('search_results', k=k, t=2, start=0)}}" class="btn btn-primary btn-xs" role="button">View</a></td>
+					<td><a href="{{url_for('search_results', k=k, t=f, start=0)}}" class="btn btn-primary btn-xs" role="button">View</a></td>
 					{% endif %}
 				</tr>
 				<tr>
 					{% if facets['facet_fields']['overall'][5] %}
+					{% set f = facets['facet_fields']['overall'][4] %}
 					<td>{{facets['facet_fields']['overall'][4]}}</td>
 					<td>{{facets['facet_fields']['overall'][5]}}</td>
-					<td><a href="{{url_for('search_results', k=k, t=3, start=0)}}" class="btn btn-primary btn-xs" role="button">View</a></td>
+					<td><a href="{{url_for('search_results', k=k, t=f, start=0)}}" class="btn btn-primary btn-xs" role="button">View</a></td>
 					{% endif %}
 				</tr>
 				<tr>
 					{% if facets['facet_fields']['overall'][7] %}
+					{% set f = facets['facet_fields']['overall'][6] %}
 					<td>{{facets['facet_fields']['overall'][6]}}</td>
 					<td>{{facets['facet_fields']['overall'][7]}}</td>
-					<td><a href="{{url_for('search_results', k=k, t=4, start=0)}}" class="btn btn-primary btn-xs" role="button">View</a></td>
+					<td><a href="{{url_for('search_results', k=k, t=f, start=0)}}" class="btn btn-primary btn-xs" role="button">View</a></td>
 					{% endif %}
 				</tr>
 				<tr>
 					{% if facets['facet_fields']['overall'][9] %}
+					{% set f = facets['facet_fields']['overall'][8] %}
 					<td>{{facets['facet_fields']['overall'][8]}}</td>
 					<td>{{facets['facet_fields']['overall'][9]}}</td>
-					<td><a href="{{url_for('search_results', k=k, t=5, start=0)}}" class="btn btn-primary btn-xs" role="button">View</a></td>
+					<td><a href="{{url_for('search_results', k=k, t=f, start=0)}}" class="btn btn-primary btn-xs" role="button">View</a></td>
 					{% endif %}
 				</tr>
 			</table>
 		</td>
 	</tr>
 </table>
+{% endif %}
 </div>
 {% endblock %}
-<!-- <ul>
-{% if start + 10 < results['numFound'] %}
-<li><a href="{{url_for('search_results', k=k, t=t, start=start+10)}}">Next</a></li>
-{% else %}
-<li>Next</li>
-{% endif %}
-{% if start > 0 %}
-<li><a href="{{url_for('search_results', k=k, t=t, start=start-10)}}">Previous</a></li>
-{% else %}
-<li>Previous</li>
-{% endif %}
-</ul> -->

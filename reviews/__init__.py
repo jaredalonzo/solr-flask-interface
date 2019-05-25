@@ -63,9 +63,6 @@ def create_app(test_config=None):
             t = ''
         start = request.args.get('start')
         res = solr.review_search(k, t, start=start)
-        print(res['facet_counts'])
-        print("------------------------------------------------")
-        print(res['response']['numFound'])
         return render_template('searchresults.html',
                                 results=res['response'],
                                 facets=res['facet_counts'],

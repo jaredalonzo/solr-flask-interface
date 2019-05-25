@@ -18,6 +18,7 @@
   <fieldType name="plongs" class="solr.LongPointField" docValues="true" multiValued="true"/>
   <fieldType name="random" class="solr.RandomSortField" indexed="true"/>
   <fieldType name="string" class="solr.StrField" sortMissingLast="true" docValues="true"/>
+  <fieldType name="currency" class="solr.CurrencyField" precisionStep="8" defaultCurrency="USD" currencyConfig="currency.xml"/>
   <fieldType name="string_ci" class="solr.TextField" sortMissingLast="true" omitNorms="true">
     <analyzer type="query">
       <tokenizer class="solr.KeywordTokenizerFactory"/>
@@ -36,6 +37,7 @@
       <filter class="solr.LowerCaseFilterFactory"/>
     </analyzer>
   </fieldType>
+
   <field name="_nest_path_" type="_nest_path_"/>
   <field name="_root_" type="string_ci" docValues="false" indexed="true" stored="false"/>
   <field name="_text_" type="text_general" multiValued="true" indexed="true" stored="false"/>
@@ -44,7 +46,7 @@
   <field name="asin" type="string_ci" multiValued="false" indexed="true" stored="true"/>
   <field name="description" type="text_general" multiValued="false" indexed="true" stored="true"/>
   <field name="title" type="text_general" multiValued="false" indexed="true" stored="true"/>
-  <field name="price" type="pfloat" multiValued="false" indexed="true" stored="true"/>
+  <field name="price" type="currency" multiValued="false" indexed="true" stored="true"/>
   <field name="id" type="string_ci" multiValued="false" indexed="true" stored="true" required="true"/>
   
 <uniqueKey>id</uniqueKey>

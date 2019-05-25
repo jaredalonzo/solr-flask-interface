@@ -2,20 +2,12 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block content %}
-<div style="padding: 0 10%;">
+<div style="padding: 0 10%; position: relative;">
 <h1>Review Search Form</h1>
+    <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
     <form action="" method="post" >
-        <div>
-            {{ wtf.quick_form(form )}}
-        </div>
-		<!-- {{ form.hidden_tag() }} -->
-        <!-- <div>
-            {{ form.keywords.label }}<br>
-            {{ form.keywords(size=32) }}
-        </div>
-		<div>
-			{{ form.submit() }}
-		</div> -->
+        {{ wtf.quick_form(form, button_map={'submit':'primary'})}}
     </form>
+    </div>
 </div>
 {% endblock %}
