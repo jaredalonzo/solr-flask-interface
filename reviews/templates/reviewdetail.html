@@ -1,19 +1,53 @@
 {% extends 'index.html' %}
 
 {% block content %}
+<div style="padding: 0 10%;">
 <h1>Review Details</h1>
 
 {% if doc=='' %}
 <h3>Sorry, no matches for {{id}}</h3>
 {% else %}
-<ul>
-<li> ProductID: {{doc['asin']}}</li>
-<li> Product Name: {{search_title(doc['asin'])}}</li>
-<li> Score: {{doc['overall']}}</li>
-<li> Summary: {{doc['summary']}}</li>
-<li> Review: {{doc['reviewText']}}</li>
+<ul class="list-group">
+<li class="list-group-item"> 
+    <dl>
+        <dt>ProductID:</dt> 
+        <dd>{{doc['asin']}}</dd>
+    </dl>
+</li>
+<li class="list-group-item"> 
+    <dl>
+        <dt>Product Name:</dt>
+        <dd>{{search_title(doc['asin'])}}</dd>
+    </dl>
+</li>
+<li class="list-group-item"> 
+    <dl>
+        <dt>Score:</dt> 
+        <dd>{{doc['overall']}}</dd>
+    </dl>
+</li>
+<li class="list-group-item"> 
+    <dl>
+        <dt>Summary:</dt>
+        <dd>{{doc['summary']}}</dd>
+    </dl>
+</li>
+<li class="list-group-item"> 
+    <dl>
+        <dt>Review:</dt>
+        <dd>{{doc['reviewText']}}</dd>
+    </dl>
+</li>
 </ul>
 {% endif %}
 
-<a href="{{request.headers.get('Referer')}}">Back</a>
+<a href="{{request.headers.get('Referer')}}" class="btn btn-primary" role="button">Back</a>
+</div>
 {% endblock %}
+
+<dl>
+        <dt>Coffee</dt>
+        <dd>- black hot drink</dd>
+        <dt>Milk</dt>
+        <dd>- white cold drink</dd>
+      </dl>    

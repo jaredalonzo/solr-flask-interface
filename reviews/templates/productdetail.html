@@ -1,22 +1,44 @@
 {% extends 'index.html' %}
 
 {% block content %}
+<div style="padding: 0 10%;">
 <h1>Product Details</h1>
 
 {% if doc=='' %}
 <h3>Sorry, no matches for {{asin}}</h3>
 {% else %}
-<ul>
-    <li> ASIN: {{doc['asin']}} </li>
-    <li> Product Name: {{doc['title']}} </li>
+<ul class="list-group">
+    <li class="list-group-item"> 
+        <dl>
+            <dt>ASIN:</dt>
+            <dd>{{doc['asin']}}</dd>
+        </dl>
+    </li>
+    <li class="list-group-item">
+        <dl> 
+            <dt>Product Name:</dt>
+            <dd>{{doc['title']}}</dd>
+        </dl>
+    </li>
     {% if doc['description'] %}
-    <li> Product Description: {{doc['description']}} </li>
+    <li class="list-group-item">
+        <dl>
+            <dt>Product Description:</dt>
+            <dd>{{doc['description']}}</dd>
+        </dl>
+    </li>
     {% endif %}
     {% if doc['price'] %}
-    <li> Price: ${{doc['price']}} </li>
+    <li class="list-group-item"> 
+        <dl>
+            <dt>Price:</dt>
+            <dd>${{doc['price']}}</dd>
+        </dl>
+    </li>
     {% endif %}
 </ul>
 {% endif %}
 
-<a href="{{request.headers.get('Referer')}}">Back</a>
+<a href="{{request.headers.get('Referer')}}" class="btn btn-primary" role="button">Back</a>
+</div>
 {% endblock %}
