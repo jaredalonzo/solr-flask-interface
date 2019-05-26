@@ -13,6 +13,9 @@
 </p>
 {% endif %}
 
+<p class="font-italic">Total reviews indexed: <mark>{{get_reviews_numbers()}}</mark></p>
+<p class="font-italic">Total Amazon products indexed: <mark>{{get_products_numbers()}}</mark></p>
+
 <p>Click <a href="{{ url_for('search_form') }}">here</a> to start searching</p>
 </div>
 {% endblock %}

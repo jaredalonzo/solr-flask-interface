@@ -8,7 +8,6 @@ from reviews.forms import ReviewSearchForm
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
-    #
     bootstrap = Bootstrap(app)
     app.config.from_mapping(
         SECRET_KEY='dev',
@@ -35,7 +34,23 @@ def create_app(test_config=None):
             else:
                 doc = res['response']['docs'][0]['title']
             return doc
-        return dict(search_title=search_title)
+
+        def join_words(array, word):
+            array.append(word)
+            return array
+        
+        def get_reviews_numbers():
+            res = solr.get_collection_numbers('amazon-reviews')
+            return res['response']['numFound']
+
+        def get_products_numbers():
+            res = solr.get_collection_numbers('amazon-products')
+            return res['response']['numFound']
+
+        return dict(search_title=search_title,
+                    join_words=join_words,
+                    get_reviews_numbers=get_reviews_numbers,
+                    get_products_numbers=get_products_numbers)
 
     @app.route('/', methods=['GET'])
     @app.route('/<name>', methods=['GET'])
@@ -45,7 +60,6 @@ def create_app(test_config=None):
     @app.route('/search',methods=['GET', 'POST'])
     def search_form():
         form = ReviewSearchForm()
-        print(type(form))
         if request.method == 'GET':
             return render_template('reviewsearch.html', form=form)
         elif not form.validate():
@@ -63,9 +77,11 @@ def create_app(test_config=None):
             t = ''
         start = request.args.get('start')
         res = solr.review_search(k, t, start=start)
+        print(res)
         return render_template('searchresults.html',
                                 results=res['response'],
                                 facets=res['facet_counts'],
+                                spellcheck=res['spellcheck'],
                                 start=int(start),
                                 t=t,
                                 k=k)

@@ -35,6 +35,18 @@
 {% endif %}
 {% else %}
 <h4> No reviews found! How about a new search?</h4>
+
+{% if results['numFound'] == 0 %}
+<h3>Spell Correction</h3>
+{% set keywords = [] %}
+{% for sug in spellcheck['suggestions'] %}
+{% for word in sug['suggestion'] %}
+<p hidden>{{join_words(keywords, word)}}</p>
+{% endfor %}
+{% endfor %}
+{% endif %}
+{% set new = keywords|join(' ') %}
+<p>Search for <a href="{{url_for('search_results', k=new, t='', start=0)}}">{{new}}</a> instead?</p>
 {% endif %}
 
 <a href="{{url_for('search_form')}}" class="btn btn-primary btn-md" role="button">New Search</a>
